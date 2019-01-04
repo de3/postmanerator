@@ -43,6 +43,11 @@ Use the `-environment=/path/to/environment.json` option to provide the environme
 By default, Postmanerator will use its `default` theme, but you can change it by using the `-theme=theme_name` option.
 You can either provide a theme name from the [official themes repository](https://github.com/aubm/postmanerator-themes), or a full local path to theme folder.
 
+### Provide postman version
+
+By default, Postmanerator will use `v1` format to parse postman collection, you can change it by using `-postman-version=v2` to use another version.
+Currently, it support for version `v1` and `v2`, for `v2` it included v2 and v2.1.
+
 ### Provide the output
 
 By default, Postmanerator will print the generated output to the standard output. You can change that by providing a path to the `-output=/path/to/generated/doc.html` option.
