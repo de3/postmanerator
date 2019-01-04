@@ -95,10 +95,10 @@ func (p *CollectionV2Parser) buildFolderFromItem(item itemV2, folder Folder) (Fo
 
 func (p *CollectionV2Parser) buildRequest(item itemV2) (Request, error) {
 	var url string
-	switch item.Request.URL.(type) {
-	case requestURLV2:
-		urlV2, _ := item.Request.URL.(requestURLV2)
-		url = urlV2.Raw
+	switch v := item.Request.URL.(type) {
+	case map[string]interface{}:
+		urlV2, _ := v["raw"].(string)
+		url = urlV2
 	case string:
 		url, _ = item.Request.URL.(string)
 	}
