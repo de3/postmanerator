@@ -36,9 +36,13 @@ func (p *CollectionV2Parser) buildCollectionFromV2(src collectionV2, options Bui
 	// build folder based on item data
 	for _, item := range src.Items {
 		newFolder := Folder{}
-		newFolder, _ = p.buildFolderFromItem(item, newFolder)
+		newRequest := Request{}
+		newFolder, newRequest, _ = p.buildFolderFromItem(item, newFolder)
 
 		collection.Folders = append(collection.Folders, newFolder)
+		if newRequest.Name != "" {
+			collection.Requests = append(collection.Requests, newRequest)
+		}
 	}
 
 	return collection, nil
@@ -66,24 +70,27 @@ func (p *CollectionV2Parser) buildFolderFromItemRecurse(item itemV2, folder Fold
 	return folder, nil
 }
 
-func (p *CollectionV2Parser) buildFolderFromItem(item itemV2, folder Folder) (Folder, error) {
+func (p *CollectionV2Parser) buildFolderFromItem(item itemV2, folder Folder) (Folder, Request, error) {
 	var req Request
+
+	if item.Request.Method != "" {
+		req, _ = p.buildRequest(item)
+	}
+
+	if len(item.Items) == 0 {
+		return Folder{}, req, nil
+	}
 
 	folder.ID = item.ID
 	folder.Name = item.Name
 	folder.Description = item.Description
 
-	if item.Request.Method != "" {
-		req, _ = p.buildRequest(item)
-		folder.Requests = append(folder.Requests, req)
-	}
-
 	for _, subitem := range item.Items {
-		req, _ = p.buildRequest(subitem)
-		folder.Requests = append(folder.Requests, req)
+		subreq, _ := p.buildRequest(subitem)
+		folder.Requests = append(folder.Requests, subreq)
 	}
 
-	return folder, nil
+	return folder, req, nil
 }
 
 func (p *CollectionV2Parser) buildRequest(item itemV2) (Request, error) {
