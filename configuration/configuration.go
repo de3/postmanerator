@@ -24,6 +24,7 @@ type Configuration struct {
 	IgnoredResponseHeaders                     StringsFlag
 	ThemesDirectory                            string
 	Args                                       []string
+	PostmanVersion                             string
 }
 
 const (
@@ -60,6 +61,7 @@ func parseCommandFlags() {
 	flag.StringVar(&Config.ThemeLocalName, "theme-local-name", "", "the name of the local copy of the downloaded theme")
 	flag.Var(&Config.IgnoredResponseHeaders, "ignored-response-headers", "a comma separated list of ignored response headers")
 	flag.Var(&Config.IgnoredRequestHeaders, "ignored-request-headers", "a comma separated list of ignored request headers")
+	flag.StringVar(&Config.PostmanVersion, "postman-version", "v1", "postman version format")
 	flag.Parse()
 }
 

@@ -3,13 +3,19 @@ package postman
 import (
 	"encoding/json"
 	"fmt"
+	"html"
 	"strings"
 )
 
-type CollectionV1Parser struct{}
+type CollectionV1Parser struct {
+	PostmanVersion string
+}
 
 func (p *CollectionV1Parser) CanParse(contents []byte) bool {
-	return true
+	if p.PostmanVersion == "v1" {
+		return true
+	}
+	return false
 }
 
 func (p *CollectionV1Parser) Parse(contents []byte, options BuilderOptions) (Collection, error) {
@@ -135,7 +141,7 @@ func (p *CollectionV1Parser) buildRequestHeaders(v1 requestV1, options BuilderOp
 		headers = append(headers, KeyValuePair{
 			Name:  parts[0],
 			Key:   parts[0],
-			Value: parts[1],
+			Value: html.EscapeString(parts[1]),
 		})
 	}
 	return headers
