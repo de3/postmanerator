@@ -3,6 +3,7 @@ package postman
 import (
 	"encoding/json"
 	"html"
+	"strconv"
 )
 
 type CollectionV2Parser struct {
@@ -131,8 +132,9 @@ func (p *CollectionV2Parser) buildHeaders(headersV2 []requestHeaderV2) []KeyValu
 
 func (p *CollectionV2Parser) buildResponse(responseV2 []responseV2) []Response {
 	responses := make([]Response, 0)
-	for _, res := range responseV2 {
+	for idx, res := range responseV2 {
 		responses = append(responses, Response{
+			ID:         strconv.Itoa(idx),
 			Name:       res.Name,
 			Status:     res.Status,
 			StatusCode: res.Code,
